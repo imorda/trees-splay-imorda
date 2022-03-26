@@ -1,12 +1,11 @@
 #include <SplayTree.h>
 
-
 bool SplayTree::contains(int value) const
 {
-    SplayTree * self = const_cast<SplayTree*>(this);
+    SplayTree * self = const_cast<SplayTree *>(this);
 
     Node * target = lower_max_val_impl_dfs(value, root);
-    if(target == nullptr){
+    if (target == nullptr) {
         self->splay(min());
         return false;
     }
@@ -21,12 +20,12 @@ bool SplayTree::insert(int value)
     Node * right = split(value);
 
     splay(max());
-    if(root != nullptr && root->getValue() == value){
+    if (root != nullptr && root->getValue() == value) {
         merge(right);
         return false;
     }
 
-    Node* left = root;
+    Node * left = root;
 
     root = new Node(value);
 
@@ -58,7 +57,7 @@ bool SplayTree::remove(int value)
     if (left != nullptr) {
         left->parent = nullptr;
     }
-    if(right != nullptr){
+    if (right != nullptr) {
         right->parent = nullptr;
     }
     merge(right);
@@ -86,31 +85,36 @@ std::vector<int> SplayTree::values() const
 
 void SplayTree::splay(Node * target)
 {
-    if(target == nullptr){
+    if (target == nullptr) {
         return;
     }
 
-    while(target->parent != nullptr){
+    while (target->parent != nullptr) {
         Node * parent = target->parent;
         Node * grandparent = parent->parent;
-        if(target == parent->left){
-            if(grandparent == nullptr){
-                rotate_right(parent); //invalidates parent, grandparent
-            } else if (parent == grandparent->left){
-                rotate_right(grandparent); //invalidates parent, grandparent
+        if (target == parent->left) {
+            if (grandparent == nullptr) {
+                rotate_right(parent); // invalidates parent, grandparent
+            }
+            else if (parent == grandparent->left) {
+                rotate_right(grandparent); // invalidates parent, grandparent
                 rotate_right(target->parent);
-            } else {
-                rotate_right(parent); //invalidates parent, grandparent
+            }
+            else {
+                rotate_right(parent); // invalidates parent, grandparent
                 rotate_left(target->parent);
             }
-        } else {
-            if(grandparent == nullptr){
-                rotate_left(parent); //invalidates parent, grandparent
-            } else if (parent == grandparent->right){
-                rotate_left(grandparent); //invalidates parent, grandparent
+        }
+        else {
+            if (grandparent == nullptr) {
+                rotate_left(parent); // invalidates parent, grandparent
+            }
+            else if (parent == grandparent->right) {
+                rotate_left(grandparent); // invalidates parent, grandparent
                 rotate_left(target->parent);
-            } else {
-                rotate_left(parent); //invalidates parent, grandparent
+            }
+            else {
+                rotate_left(parent); // invalidates parent, grandparent
                 rotate_right(target->parent);
             }
         }
@@ -118,43 +122,44 @@ void SplayTree::splay(Node * target)
     root = target;
 }
 
-Node * SplayTree::split(int value) //extracts and returns a bigger subtree than value
+Node * SplayTree::split(int value) // extracts and returns a bigger subtree than value
 {
     Node * found = lower_max_val_impl_dfs(value, root);
-    if(found == nullptr){
+    if (found == nullptr) {
         Node * temp = root;
         root = nullptr;
         return temp;
     }
 
     splay(found);
-    if(root == nullptr){
+    if (root == nullptr) {
         return nullptr;
     }
 
     Node * ans;
-    if(root->getValue() <= value) {
+    if (root->getValue() <= value) {
         ans = root->right;
         root->right = nullptr;
-    } else {
+    }
+    else {
         ans = root;
-        root = ans -> left;
+        root = ans->left;
         ans->left = nullptr;
-        if (root != nullptr){
+        if (root != nullptr) {
             root->parent = nullptr;
         }
     }
 
-    if(ans != nullptr){
+    if (ans != nullptr) {
         ans->parent = nullptr;
     }
 
     return ans;
 }
 
-void SplayTree::merge(Node * other) //other must be bigger than the whole SplayTree
+void SplayTree::merge(Node * other) // other must be bigger than the whole SplayTree
 {
-    if(root == nullptr){
+    if (root == nullptr) {
         root = other;
         return;
     }
@@ -166,11 +171,11 @@ void SplayTree::merge(Node * other) //other must be bigger than the whole SplayT
 Node * SplayTree::max() const
 {
     Node * current = root;
-    if(current == nullptr){
+    if (current == nullptr) {
         return nullptr;
     }
 
-    while(current->right != nullptr){
+    while (current->right != nullptr) {
         current = current->right;
     }
     return current;
@@ -179,11 +184,11 @@ Node * SplayTree::max() const
 Node * SplayTree::min() const
 {
     Node * current = root;
-    if(current == nullptr){
+    if (current == nullptr) {
         return nullptr;
     }
 
-    while(current->left != nullptr){
+    while (current->left != nullptr) {
         current = current->left;
     }
     return current;
@@ -196,20 +201,20 @@ SplayTree::~SplayTree()
 
 void update_children_parents(Node * parent)
 {
-    if(parent == nullptr){
+    if (parent == nullptr) {
         return;
     }
-    if(parent->left != nullptr){
+    if (parent->left != nullptr) {
         parent->left->parent = parent;
     }
-    if(parent->right != nullptr){
+    if (parent->right != nullptr) {
         parent->right->parent = parent;
     }
 }
 
-void values_impl_dfs(std::vector<int>& answer, Node * cur_node)
+void values_impl_dfs(std::vector<int> & answer, Node * cur_node)
 {
-    if(cur_node == nullptr){
+    if (cur_node == nullptr) {
         return;
     }
 
@@ -220,19 +225,19 @@ void values_impl_dfs(std::vector<int>& answer, Node * cur_node)
 
 Node * lower_max_val_impl_dfs(const int value, Node * cur_node)
 {
-    if(cur_node == nullptr || cur_node->getValue() == value){
+    if (cur_node == nullptr || cur_node->getValue() == value) {
         return cur_node;
     }
-    if(cur_node->getValue() > value){
+    if (cur_node->getValue() > value) {
         return lower_max_val_impl_dfs(value, cur_node->left);
     }
 
     Node * right = lower_max_val_impl_dfs(value, cur_node->right);
-    if(right == nullptr){
+    if (right == nullptr) {
         return cur_node;
     }
 
-    if(right->getValue() > cur_node->getValue()){
+    if (right->getValue() > cur_node->getValue()) {
         return right;
     }
     return cur_node;
@@ -243,14 +248,15 @@ void rotate_left(Node * target)
     Node * parent = target->parent;
     Node * right_child = target->right;
 
-    if(right_child == nullptr){
+    if (right_child == nullptr) {
         return;
     }
 
-    if(parent != nullptr){
-        if(parent->left == target){
+    if (parent != nullptr) {
+        if (parent->left == target) {
             parent->left = right_child;
-        } else {
+        }
+        else {
             parent->right = right_child;
         }
     }
@@ -262,7 +268,7 @@ void rotate_left(Node * target)
     target->parent = right_child;
     right_child->parent = parent;
 
-    if(target->right != nullptr){
+    if (target->right != nullptr) {
         target->right->parent = target;
     }
 }
@@ -272,14 +278,15 @@ void rotate_right(Node * target)
     Node * parent = target->parent;
     Node * left_child = target->left;
 
-    if(left_child == nullptr){
+    if (left_child == nullptr) {
         return;
     }
 
-    if(parent != nullptr){
-        if(parent->left == target){
+    if (parent != nullptr) {
+        if (parent->left == target) {
             parent->left = left_child;
-        } else {
+        }
+        else {
             parent->right = left_child;
         }
     }
@@ -291,7 +298,7 @@ void rotate_right(Node * target)
     target->parent = left_child;
     left_child->parent = parent;
 
-    if(target->left != nullptr){
+    if (target->left != nullptr) {
         target->left->parent = target;
     }
 }

@@ -3,7 +3,10 @@
 class Node
 {
 public:
-    Node(int _value) : value(_value) {}
+    Node(int _value)
+        : value(_value)
+    {
+    }
 
     Node * left = nullptr;
     Node * right = nullptr;
