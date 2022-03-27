@@ -23,7 +23,7 @@ public:
         delete right;
     }
 
-    static void update_children_parents(Node &);
+    static void update_children_parents(Node *);
 
     static Node * lower_max_val(int value, Node *); // Finds max value in tree in range [min(), value]
 

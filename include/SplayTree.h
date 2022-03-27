@@ -34,7 +34,7 @@ private:
 
     Node * min() const;
 
-    static void rotate(Node &);
+    static void rotate(Node *);
 
     static void values_impl_dfs(std::vector<int> &, Node *);
 };

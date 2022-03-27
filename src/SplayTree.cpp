@@ -31,7 +31,7 @@ bool SplayTree::insert(int value)
 
     root->left = left;
     root->right = right;
-    Node::update_children_parents(*root);
+    Node::update_children_parents(root);
     sz++;
     return true;
 }
@@ -93,15 +93,15 @@ void SplayTree::splay(Node * target)
         Node * parent = target->parent;
         Node * grandparent = parent->parent;
         if (grandparent == nullptr) {
-            rotate(*target);
+            rotate(target);
         }
         else if (parent == grandparent->left) {
-            rotate(*parent);
-            rotate(*target);
+            rotate(parent);
+            rotate(target);
         }
         else {
-            rotate(*target);
-            rotate(*target);
+            rotate(target);
+            rotate(target);
         }
     }
     root = target;
@@ -135,7 +135,7 @@ void SplayTree::merge(Node * other) // other must be bigger than the whole Splay
     }
     splay(max()); // After this operation max element is root and since it's max, there is no right child
     root->right = other;
-    Node::update_children_parents(*root);
+    Node::update_children_parents(root);
 }
 
 Node * SplayTree::max() const
@@ -180,9 +180,13 @@ void SplayTree::values_impl_dfs(std::vector<int> & answer, Node * cur_node)
     values_impl_dfs(answer, cur_node->right);
 }
 
-void SplayTree::rotate(Node & target)
+void SplayTree::rotate(Node * target)
 {
-    Node * parent = target.parent;
+    if (target == nullptr) {
+        return;
+    }
+
+    Node * parent = target->parent;
     if (parent == nullptr) {
         return;
     }
@@ -191,23 +195,23 @@ void SplayTree::rotate(Node & target)
 
     if (grandparent != nullptr) {
         if (grandparent->left == parent) {
-            grandparent->left = &target;
+            grandparent->left = target;
         }
         else {
-            grandparent->right = &target;
+            grandparent->right = target;
         }
     }
-    target.parent = grandparent;
+    target->parent = grandparent;
 
-    if (parent->right == &target) {
-        parent->right = target.left;
-        target.left = parent;
+    if (parent->right == target) {
+        parent->right = target->left;
+        target->left = parent;
     }
     else {
-        parent->left = target.right;
-        target.right = parent;
+        parent->left = target->right;
+        target->right = parent;
     }
 
-    Node::update_children_parents(*parent);
+    Node::update_children_parents(parent);
     Node::update_children_parents(target);
 }

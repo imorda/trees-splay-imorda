@@ -17,12 +17,16 @@ Node * Node::lower_max_val(const int value, Node * cur_node)
     return right;
 }
 
-void Node::update_children_parents(Node & parent)
+void Node::update_children_parents(Node * parent)
 {
-    if (parent.left != nullptr) {
-        parent.left->parent = &parent;
+    if (parent == nullptr) {
+        return;
     }
-    if (parent.right != nullptr) {
-        parent.right->parent = &parent;
+
+    if (parent->left != nullptr) {
+        parent->left->parent = parent;
+    }
+    if (parent->right != nullptr) {
+        parent->right->parent = parent;
     }
 }
