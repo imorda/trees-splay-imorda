@@ -237,10 +237,7 @@ Node * lower_max_val_impl_dfs(const int value, Node * cur_node)
         return cur_node;
     }
 
-    if (right->getValue() > cur_node->getValue()) {
-        return right;
-    }
-    return cur_node;
+    return right;
 }
 
 void rotate_left(Node * target)
