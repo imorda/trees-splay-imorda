@@ -3,7 +3,8 @@
 #include <Node.h>
 #include <vector>
 
-class SplayTree {
+class SplayTree
+{
 public:
     bool contains(int value) const;
 
@@ -21,17 +22,17 @@ public:
 
 private:
     std::size_t sz = 0;
-    Node *root = nullptr;
+    Node * root = nullptr;
 
-    void splay(Node *target);
+    void splay(Node * target);
 
-    Node *split(int);
+    Node * split(int);
 
     void merge(Node *);
 
-    Node *max() const;
+    Node * max() const;
 
-    Node *min() const;
+    Node * min() const;
 
     static void rotate(Node &);
 

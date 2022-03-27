@@ -1,9 +1,10 @@
 #include <SplayTree.h>
 
-bool SplayTree::contains(int value) const {
-    SplayTree *self = const_cast<SplayTree *>(this);
+bool SplayTree::contains(int value) const
+{
+    SplayTree * self = const_cast<SplayTree *>(this);
 
-    Node *target = Node::lower_max_val(value, root);
+    Node * target = Node::lower_max_val(value, root);
     if (target == nullptr) {
         self->splay(min());
         return false;
@@ -14,8 +15,9 @@ bool SplayTree::contains(int value) const {
     return target->getValue() == value;
 }
 
-bool SplayTree::insert(int value) {
-    Node *right = split(value);
+bool SplayTree::insert(int value)
+{
+    Node * right = split(value);
 
     splay(max());
     if (root != nullptr && root->getValue() == value) {
@@ -23,7 +25,7 @@ bool SplayTree::insert(int value) {
         return false;
     }
 
-    Node *left = root;
+    Node * left = root;
 
     root = new Node(value);
 
@@ -34,15 +36,16 @@ bool SplayTree::insert(int value) {
     return true;
 }
 
-bool SplayTree::remove(int value) {
-    Node *target = Node::lower_max_val(value, root);
+bool SplayTree::remove(int value)
+{
+    Node * target = Node::lower_max_val(value, root);
     if (target == nullptr || target->getValue() != value) {
         return false;
     }
     splay(target);
 
-    Node *left = root->left;
-    Node *right = root->right;
+    Node * left = root->left;
+    Node * right = root->right;
 
     root->left = nullptr;
     root->right = nullptr;
@@ -62,35 +65,41 @@ bool SplayTree::remove(int value) {
     return true;
 }
 
-std::size_t SplayTree::size() const {
+std::size_t SplayTree::size() const
+{
     return sz;
 }
 
-bool SplayTree::empty() const {
+bool SplayTree::empty() const
+{
     return size() == 0;
 }
 
-std::vector<int> SplayTree::values() const {
+std::vector<int> SplayTree::values() const
+{
     std::vector<int> ans;
     ans.reserve(size());
     values_impl_dfs(ans, root);
     return ans;
 }
 
-void SplayTree::splay(Node *target) {
+void SplayTree::splay(Node * target)
+{
     if (target == nullptr) {
         return;
     }
 
     while (target->parent != nullptr) {
-        Node *parent = target->parent;
-        Node *grandparent = parent->parent;
+        Node * parent = target->parent;
+        Node * grandparent = parent->parent;
         if (grandparent == nullptr) {
             rotate(*target);
-        } else if (parent == grandparent->left) {
+        }
+        else if (parent == grandparent->left) {
             rotate(*parent);
             rotate(*target);
-        } else {
+        }
+        else {
             rotate(*target);
             rotate(*target);
         }
@@ -98,16 +107,16 @@ void SplayTree::splay(Node *target) {
     root = target;
 }
 
-Node *SplayTree::split(int value) // extracts and returns a bigger subtree than value
+Node * SplayTree::split(int value) // extracts and returns a bigger subtree than value
 {
-    Node *found = Node::lower_max_val(value, root);
+    Node * found = Node::lower_max_val(value, root);
     if (found == nullptr) {
         return std::exchange(root, nullptr);
     }
 
     splay(found);
 
-    Node *ans;
+    Node * ans;
     ans = root->right;
     root->right = nullptr;
 
@@ -118,7 +127,7 @@ Node *SplayTree::split(int value) // extracts and returns a bigger subtree than 
     return ans;
 }
 
-void SplayTree::merge(Node *other) // other must be bigger than the whole SplayTree
+void SplayTree::merge(Node * other) // other must be bigger than the whole SplayTree
 {
     if (root == nullptr) {
         root = other;
@@ -129,8 +138,9 @@ void SplayTree::merge(Node *other) // other must be bigger than the whole SplayT
     Node::update_children_parents(*root);
 }
 
-Node *SplayTree::max() const {
-    Node *current = root;
+Node * SplayTree::max() const
+{
+    Node * current = root;
     if (current == nullptr) {
         return nullptr;
     }
@@ -141,8 +151,9 @@ Node *SplayTree::max() const {
     return current;
 }
 
-Node *SplayTree::min() const {
-    Node *current = root;
+Node * SplayTree::min() const
+{
+    Node * current = root;
     if (current == nullptr) {
         return nullptr;
     }
@@ -153,12 +164,13 @@ Node *SplayTree::min() const {
     return current;
 }
 
-SplayTree::~SplayTree() {
+SplayTree::~SplayTree()
+{
     delete root;
 }
 
-
-void SplayTree::values_impl_dfs(std::vector<int> &answer, Node *cur_node) {
+void SplayTree::values_impl_dfs(std::vector<int> & answer, Node * cur_node)
+{
     if (cur_node == nullptr) {
         return;
     }
@@ -168,18 +180,20 @@ void SplayTree::values_impl_dfs(std::vector<int> &answer, Node *cur_node) {
     values_impl_dfs(answer, cur_node->right);
 }
 
-void SplayTree::rotate(Node &target) {
-    Node *parent = target.parent;
+void SplayTree::rotate(Node & target)
+{
+    Node * parent = target.parent;
     if (parent == nullptr) {
         return;
     }
 
-    Node *grandparent = parent->parent;
+    Node * grandparent = parent->parent;
 
     if (grandparent != nullptr) {
         if (grandparent->left == parent) {
             grandparent->left = &target;
-        } else {
+        }
+        else {
             grandparent->right = &target;
         }
     }
@@ -188,7 +202,8 @@ void SplayTree::rotate(Node &target) {
     if (parent->right == &target) {
         parent->right = target.left;
         target.left = parent;
-    } else {
+    }
+    else {
         parent->left = target.right;
         target.right = parent;
     }

@@ -1,6 +1,7 @@
 #include <Node.h>
 
-Node *Node::lower_max_val(const int value, Node *cur_node) {
+Node * Node::lower_max_val(const int value, Node * cur_node)
+{
     if (cur_node == nullptr || cur_node->getValue() == value) {
         return cur_node;
     }
@@ -8,7 +9,7 @@ Node *Node::lower_max_val(const int value, Node *cur_node) {
         return lower_max_val(value, cur_node->left);
     }
 
-    Node *right = lower_max_val(value, cur_node->right);
+    Node * right = lower_max_val(value, cur_node->right);
     if (right == nullptr) {
         return cur_node;
     }
@@ -16,7 +17,8 @@ Node *Node::lower_max_val(const int value, Node *cur_node) {
     return right;
 }
 
-void Node::update_children_parents(Node &parent) {
+void Node::update_children_parents(Node & parent)
+{
     if (parent.left != nullptr) {
         parent.left->parent = &parent;
     }
