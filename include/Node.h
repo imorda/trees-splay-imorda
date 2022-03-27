@@ -1,27 +1,31 @@
 #pragma once
 
-class Node {
+class Node
+{
 public:
     Node(int value)
-            : m_value(value) {
+        : m_value(value)
+    {
     }
 
-    Node *left = nullptr;
-    Node *right = nullptr;
-    Node *parent = nullptr;
+    Node * left = nullptr;
+    Node * right = nullptr;
+    Node * parent = nullptr;
 
-    int getValue() const {
+    int getValue() const
+    {
         return m_value;
     }
 
-    ~Node() {
+    ~Node()
+    {
         delete left;
         delete right;
     }
 
     static void update_children_parents(Node &);
 
-    static Node *lower_max_val(int value, Node *); // Finds max value in tree in range [min(), value]
+    static Node * lower_max_val(int value, Node *); // Finds max value in tree in range [min(), value]
 
 private:
     const int m_value;
