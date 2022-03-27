@@ -1,4 +1,5 @@
 #include <SplayTree.h>
+#include <utility>
 
 bool SplayTree::contains(int value) const
 {
@@ -182,10 +183,6 @@ void SplayTree::values_impl_dfs(std::vector<int> & answer, Node * cur_node)
 
 void SplayTree::rotate(Node * target)
 {
-    if (target == nullptr) {
-        return;
-    }
-
     Node * parent = target->parent;
     if (parent == nullptr) {
         return;
